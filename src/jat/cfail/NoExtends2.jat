@@ -1,0 +1,9 @@
+package jat.cfail;
+
+import jat.test.Atomicizer;
+
+// The extending class should be a value
+@CompFail("Cannot extend an atomic class with a class",7)
+public class NoExtends2 extends Atomicizer {
+    // doesn't matter what's here
+}

@@ -1,0 +1,4 @@
+@CompFail("not allowed in Value",3)
+public value Fail1 {
+    Object o;
+}

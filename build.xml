@@ -1,0 +1,77 @@
+<project name="Jat Compiler" id="Jat" default="test">
+
+    <property name="build.dir" value="/tmp/jat" />
+    <property name="piraha.path" value="/home/sbrandt/workspace/piraha-peg/bin" />
+
+    <path id="piraha">
+        <pathelement path="${piraha.path}"/>
+    </path>
+    <path id="runtime">
+        <pathelement path="${piraha.path}"/>
+        <pathelement path="${build.dir}"/>
+        <pathelement path="."/>
+    </path>
+
+    <target name="builddir">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    <target name="jatlang" depends="builddir">
+        <javac debug="on"
+                includes="jat/lang/**.java"
+                srcdir="src"
+                destdir="${build.dir}"
+                includeantruntime="false">
+            <classpath refid="piraha"/>
+        </javac>
+    </target>
+    <target name="compiler" depends="jatlang,builddir">
+        <javac debug="on"
+                includes="jat/comp/**.java"
+                srcdir="src"
+                destdir="${build.dir}"
+                includeantruntime="false">
+            <classpath refid="piraha"/>
+        </javac>
+    </target>
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="taskcomp" depends="compiler">
+        <javac debug="on"
+                includes="jat/ant/**.java"
+                srcdir="src"
+                destdir="${build.dir}"
+                includeantruntime="true">
+            <classpath refid="runtime"/>
+        </javac>
+    </target>
+    <target name="test" depends="taskcomp">
+        <taskdef name="jat"
+            classname="jat.ant.Jat"
+            classpath="${build.dir}"/>
+        <taskdef name="unit"
+            classname="jat.ant.Unit"
+            classpath="${build.dir}"/>
+        <jat>
+            <classpath refid="runtime"/>
+            <fileset dir="/home/sbrandt/java/jat/src"
+                        includes="jat/test/*.jat"/>
+        </jat>
+        <unit>
+            <classpath refid="runtime"/>
+            <fileset dir="/home/sbrandt/java/jat/src"
+                        includes="jat/test/*.jat"/>
+        </unit>
+    </target>
+    <target name="buildfail" depends="taskcomp">
+        <taskdef name="jat"
+            classname="jat.ant.Jat"
+            classpath="${build.dir}"/>
+        <jat>
+            <classpath refid="runtime"/>
+            <fileset dir="/home/sbrandt/java/jat/src"
+                        includes="jat/cfail/*.jat"/>
+        </jat>
+    </target>
+</project>

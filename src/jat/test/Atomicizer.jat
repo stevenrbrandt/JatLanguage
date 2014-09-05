@@ -1,0 +1,14 @@
+package jat.test;
+
+/**
+ * Types of variables may be:
+ * primitive types, values, and
+ * atomic classes.
+ */
+public atomic class Atomicizer {
+    atomic int a;
+    atomic int b;
+    //atomic Object o;
+    final int c = 3;
+    atomic Person p;
+}

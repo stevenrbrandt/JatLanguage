@@ -1,0 +1,9 @@
+package jat.cfail;
+
+import jat.test.Person;
+
+// The extending class should be a value
+@CompFail("Cannot extend a value with a class",7)
+public class NoExtends extends Person {
+    // doesn't matter what's here
+}

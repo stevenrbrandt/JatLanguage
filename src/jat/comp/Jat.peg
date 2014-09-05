@@ -1,0 +1,83 @@
+skipper = \b([ \t\r\n]|//.*|/\*(\*[^/]|[^*])*\*/)*
+
+fname = {base}{suffix}
+base = [^\\.]*
+suffix = \.jat$
+
+# keywords
+public = public
+static = static
+atomic = atomic
+
+annotation = @ {name}( \( {exprlist} \))?
+
+dquot = "([^"\\]|\\.)*"
+squot = '([^'\\]|\\.)*'
+num = -?[0-9]+(\.[0-9]+)?(e[+-]?[0-9]+)?
+name = (?!(return|for|if|final|static|public)\b)[a-zA-Z][a-zA-Z0-9_]*
+chain = ( \. {name} \( {exprlist} \))+
+dotname = {name}( \. {name})*
+call = {dotname} \( {exprlist} \)
+paren = \( {expr} \)
+newxpr = new {type}( \( {exprlist} \)| \{ {exprlist} \})
+indexpr = {dotname} \[ {expr} \]
+val=({newxpr}|{indexpr}|{call}|{num}|{dquot}|{squot}|{dotname}|{paren}){chain}?
+mulop = [*/%]
+aexpr = {val}( {mulop} {val})*
+addop = [-+]
+shiftexpr = {aexpr}( {addop} {aexpr})*
+shiftop = (<<|>>|>>>)
+condexpr = {shiftexpr}( {shiftop} {shiftexpr})*
+condop = (<=?|>=?|instanceof)
+eqexpr = {condexpr}( {condop} {condexpr})?
+eqop = [!=]=
+ampexpr = {eqexpr}( {eqop} {eqexpr})?
+carexpr = {ampexpr}( & {ampexpr})*
+pipeexpr = {carexpr}( \^ {carexpr})*
+andexpr = {pipeexpr}( \| {pipeexpr})*
+andop = &&
+expr = {andexpr}( {andop} {andexpr})*
+extends = extends {type}
+implements = ( implements {type}( , {type})*)?
+
+array = \[ \]
+template = < ({name}( , {name})*)? >
+
+type = {dotname}( {template})?( {array})*
+
+argdecl = {type} {name}
+argsdecl = ({argdecl}( , {argdecl})*)?
+
+exprlist = ({expr}( , {expr})*)?
+callstmt = {dotname} \( {exprlist} \) ;
+ifstmt = if \( {expr} \) {block}( else if \( {expr} \) {block})*( else {block})?
+aop = [-+*/]?=
+index = \[ {expr} \]
+dotindex = {dotname}( {index})?
+assign = {dotindex} {aop} {expr} \;
+whilestmt = while \( {expr} \) {block}
+atomstmt = atomic {block}
+forinit = {type} {dotname} = {expr}|{dotname} = {expr}
+forincr = {dotname} {aop} {expr}
+forstmt = for \( {forinit} ; {expr} ; {forincr} \) {block}
+return = return {expr} ;|return ;
+
+statement = ({forstmt}|{ifstmt}|{whilestmt}|{atomstmt}|{fdecl}|{assign}|{callstmt}|{return})
+
+block = \{( {statement})* \}
+
+mdecl = {type} {name} \( {argsdecl} \) ({block}|;)
+ctor = {name} \( {argsdecl} \) ({block}|;)
+
+final = final
+fdecl = ({final} )?{type} {name} (= {expr})? ;
+
+cdecl = ({atomic} )?({public} )?({static} )?({mdecl}|{fdecl}|{ctor})
+
+package = package {dotname} ;
+import = import ({static} )?{dotname} ;
+fimport = from {dotname} import( {static})? {name}( , {name})*;
+
+classtype = class|interface|value
+cdecls = \{ ({cdecl} )*\}
+class = ^ ({package} )?({import} |{fimport} )*({annotation} )?({public} )?({atomic} )?{classtype} {name}( {extends})?{implements} {cdecls} $

@@ -1,0 +1,9 @@
+package jat.test;
+
+public value Person {
+    int a = 3;
+    int b = 10;
+    String name="";
+    SSN sn = new SSN();
+    public void run() {}
+}

@@ -1,0 +1,6 @@
+package jat.cfail;
+
+@CompFail("Static fields must be Value or AtomicClass at",5)
+public class Static {
+    static int[] n= null;
+}

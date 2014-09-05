@@ -1,0 +1,67 @@
+package jat.test;
+
+from java.io
+    import IOException, File;
+import jat.lang.SnapShot;
+
+public class Test extends jat.lang.UnitTest {
+    ValueArray<Integer> va =
+        new ValueArray<Integer>(new Integer[]{1,2,3});
+    static int vv = 3;
+    atomic int ai;
+    atomic int aj=4;
+    Value v = new Person();
+    int k;
+    int k2 = 4+2*(3-1);
+    Test foo() {
+        return this;
+    }
+    public Test() {
+        atomic {
+            ai = 3;
+        }
+    }
+    public void runTest() {
+        System.out.println("Hello, world");
+        for(int i=0;i<10;i+=1) {
+            System.out.println("i="+i);
+        }
+        final int nn = 3;
+        int n = nn;
+        int i;
+        for(i=0;i<n;i+=1) {
+            System.out.println("i="+i);
+        }
+        if(n < nn) {
+            assertTrue(false,"n < "+nn);
+        } else if(n == nn) {
+            System.out.println("n == "+nn);
+        } else {
+            assertTrue(false,"n > "+nn);
+        }
+        while(n > 0) {
+            n -= 1;
+        }
+        //async(System.out.println("async"));
+        assertTrue(n == 0,"n == null");
+        Test t = new Test();
+        Test t2 = new Test().foo().foo();
+        Integer n1 = 3;
+        Double n2 = 3.0;
+        assertTrue(n1 == n2,"n1 == n2");
+
+        String s1 = "foo";
+        String s2 = s1+"";
+        assertTrue(s1 == s2,"s1 == s2");
+        Test test = new Test();
+        SnapShot<Integer> ss = new SnapShot<Integer>();
+        atomic {
+            test.ai += 2;
+            ss = test.ai.get();
+            //Future<String> s = async{ mkstring() };
+            //async{ System.out.println(s.get()) };
+        }
+        System.out.println("ss="+ss.get());
+        assertTrue(ss.get() == 5,"ss.get()==5");
+    }
+}

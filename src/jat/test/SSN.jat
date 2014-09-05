@@ -1,0 +1,5 @@
+package jat.test;
+
+public value SSN {
+    int ssn = 1112223333;
+}

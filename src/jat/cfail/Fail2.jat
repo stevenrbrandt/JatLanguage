@@ -1,0 +1,8 @@
+import jat.lang.Atom;
+
+@CompFail("jat.lang.Atom<T> cannot contain 'java.lang.Object'",6)
+public class Fail2 {
+    void foo() {
+        Atom<Object> ao = new Atom<Object>();
+    }
+}
