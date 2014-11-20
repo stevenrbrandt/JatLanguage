@@ -15,14 +15,12 @@ public class Transaction {
     states.add(t);
   }
   public void finish() {
-    System.out.println("  [finish]");
     boolean succeed = true;
     List<AtomicState<?>> list = new ArrayList<AtomicState<?>>();
     for(AtomicState<?> astate : states) {
       astate.atom.lock.lock();
       list.add(astate);
       if(astate.atype == AType.READ && !Util.equals(astate.origData,astate.atom.data)) {
-        System.out.println("abort!");
         succeed = false;
         break;
       }
