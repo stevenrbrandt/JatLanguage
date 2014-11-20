@@ -1,13 +1,13 @@
 package jat.lang;
 
 /**
- * Snapshots can only be set inside
+ * AtomicFutures can only be set inside
  * transactions, and can be
  * read outside them. They preserve
  * the value last seen inside a
  * transaction.
  */
-public class SnapShot<T> {
+public class AtomicFuture<T> {
     private T data;
     public void set(final T v,final Transaction t) {
         data = v;

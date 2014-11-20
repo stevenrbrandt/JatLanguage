@@ -4,8 +4,10 @@ import edu.lsu.cct.piraha.Group;
 import java.io.PrintWriter;
 
 public class AtomJat {
+    Jat jat;
     PrintWriter pw;
-    public AtomJat(PrintWriter pw) {
+    public AtomJat(Jat jat,PrintWriter pw) {
+        this.jat = jat;
         this.pw = pw;
     }
     public void emit(Group g) {
@@ -40,9 +42,12 @@ public class AtomJat {
                 g.dumpMatches();
                 throw new Error("not handled "+aop);
             }
+        } else if(Jat.eq(pn,"callstmt")) {
+            jat.emit(g);
         } else if(Jat.eq(pn,"statement","dotindex","expr",
             "condexpr","shiftexpr","aexpr","val","call",
-            "eqexpr","ampexpr","carexpr","andexpr","pipeexpr")) {
+            "eqexpr","ampexpr","carexpr","andexpr","pipeexpr"
+            )) {
             for(int i=0;i<g.groupCount();i++)
                 emit(g.group(i));
         } else if(Jat.eq(pn,"name","num","dquot")) {
@@ -52,6 +57,33 @@ public class AtomJat {
                 if(i>0) pw.print('.');
                 emit(g.group(i));
             }
+        } else if(Jat.eq(pn,"syncstmt")) {
+          pw.println("__tr__.addTask(new Runnable() {");
+          pw.print("public void run() ");
+          jat.emit(g.group(0));
+          pw.println("});");
+        } else if(Jat.eq(pn,"syncassign")) { // Need to work on this
+          pw.print("final AtomicFuture<");
+          jat.emit(g.group(0));
+          pw.print("> ");
+          jat.emit(g.group(1));
+          pw.print("= new AtomicFuture<");
+          jat.emit(g.group(0));
+          pw.println(">();");
+          pw.println("__tr__.addTask(new Runnable() {");
+          pw.println("public void run() {");
+          jat.emit(g.group(1));
+          pw.print(".set(");
+          pw.print("new java.util.concurrent.Callable<");
+          jat.emit(g.group(0));
+          pw.println(">() {");
+          pw.print("public ");
+          jat.emit(g.group(0));
+          pw.print("call()");
+          jat.emit(g.group(2));
+          pw.println("}.call(),__tr__);");
+          pw.println("}");
+          pw.println("});");
         } else {
             g.dumpMatches();
             System.out.println(g.substring());

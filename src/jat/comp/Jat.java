@@ -344,9 +344,9 @@ public class Jat {
             pw.println("/**begin atomic**/");
             pw.println("while(true) {");
             pw.println("try {");
-            pw.println("jat.lang.Transaction __tr__"+
+            pw.println("final jat.lang.Transaction __tr__"+
                 "= new jat.lang.Transaction();");
-            AtomJat aj = new AtomJat(pw);
+            AtomJat aj = new AtomJat(this,pw);
             Group g0 = g.group(0);
             for(int i=0;i<g0.groupCount();i++) {
                 aj.emit(g0.group(i));

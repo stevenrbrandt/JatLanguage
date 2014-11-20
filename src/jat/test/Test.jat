@@ -2,7 +2,7 @@ package jat.test;
 
 from java.io
     import IOException, File;
-import jat.lang.SnapShot;
+import jat.lang.AtomicFuture;
 
 public class Test extends jat.lang.UnitTest {
     ValueArray<Integer> va =
@@ -26,7 +26,7 @@ public class Test extends jat.lang.UnitTest {
         for(int i=0;i<10;i+=1) {
             System.out.println("i="+i);
         }
-        final int nn = 3;
+        final int nn = 3+1;
         int n = nn;
         int i;
         for(i=0;i<n;i+=1) {
@@ -54,12 +54,12 @@ public class Test extends jat.lang.UnitTest {
         String s2 = s1+"";
         assertTrue(s1 == s2,"s1 == s2");
         Test test = new Test();
-        SnapShot<Integer> ss = new SnapShot<Integer>();
+        final AtomicFuture<Integer> ss = new AtomicFuture<Integer>();
         atomic {
             test.ai += 2;
             ss = test.ai.get();
-            //Future<String> s = async{ mkstring() };
-            //async{ System.out.println(s.get()) };
+            AtomicFuture<String> s = sync{ return "fish"; };
+            sync{ System.out.println("sstran="+ss.get()); };
         }
         System.out.println("ss="+ss.get());
         assertTrue(ss.get() == 5,"ss.get()==5");

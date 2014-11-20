@@ -1,7 +1,7 @@
 package jat.test;
 import java.io.IOException;
 import java.io.File;
-import jat.lang.SnapShot;
+import jat.lang.AtomicFuture;
 public class Test extends jat.lang.UnitTest  {
   jat.lang.ValueArray<java.lang.Integer> va =new jat.lang.ValueArray<java.lang.Integer>(new java.lang.Integer[]{1 ,2 ,3 });
   static final int vv =3 ;
@@ -17,7 +17,7 @@ public class Test extends jat.lang.UnitTest  {
     /**begin atomic**/
     while(true) {
       try {
-        jat.lang.Transaction __tr__= new jat.lang.Transaction();
+        final jat.lang.Transaction __tr__= new jat.lang.Transaction();
         ai.set(3,__tr__);
         __tr__.finish();
         break;
@@ -32,7 +32,7 @@ public class Test extends jat.lang.UnitTest  {
     for(int i =0 ;i < 10 ;i += 1 ) {
       System .out .println ("i=" + i );
     }
-    final int nn =3 ;
+    final int nn =3 + 1 ;
     int n =nn ;
     int i ;
     for(i =0 ;i < n ;i += 1 ) {
@@ -60,13 +60,28 @@ public class Test extends jat.lang.UnitTest  {
     java.lang.String s2 =s1 + "" ;
     assertTrue (jat.lang.Util.equals(s1 ,s2 ),"s1 == s2" );
     jat.test.Test test =new jat.test.Test();
-    jat.lang.SnapShot<java.lang.Integer> ss =new jat.lang.SnapShot<java.lang.Integer>();
+    final jat.lang.AtomicFuture<java.lang.Integer> ss =new jat.lang.AtomicFuture<java.lang.Integer>();
     /**begin atomic**/
     while(true) {
       try {
-        jat.lang.Transaction __tr__= new jat.lang.Transaction();
+        final jat.lang.Transaction __tr__= new jat.lang.Transaction();
         test.ai.set(test.ai.get(__tr__)+2,__tr__);
         ss.set(test.ai.get(__tr__),__tr__);
+        final AtomicFuture<java.lang.String > s = new AtomicFuture<java.lang.String >();
+        __tr__.addTask(new Runnable() {
+          public void run() {
+            s .set(new java.util.concurrent.Callable<java.lang.String >() {
+              public java.lang.String call(){
+                return "fish" ;
+              }
+            }.call(),__tr__);
+          }
+        });
+        __tr__.addTask(new Runnable() {
+          public void run() {
+            System .out .println ("sstran=" + ss .get ());
+          }
+        });
         __tr__.finish();
         break;
       } catch(jat.lang.TransactionRestart __res__) {

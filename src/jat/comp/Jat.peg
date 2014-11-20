@@ -61,8 +61,10 @@ forinit = {type} {dotname} = {expr}|{dotname} = {expr}
 forincr = {dotname} {aop} {expr}
 forstmt = for \( {forinit} ; {expr} ; {forincr} \) {block}
 return = return {expr} ;|return ;
+syncstmt = sync {block} ;
+syncassign = AtomicFuture< {type} > {name} = sync {block} ;
 
-statement = ({forstmt}|{ifstmt}|{whilestmt}|{atomstmt}|{fdecl}|{assign}|{callstmt}|{return})
+statement = ({syncassign}|{syncstmt}|{forstmt}|{ifstmt}|{whilestmt}|{atomstmt}|{fdecl}|{assign}|{callstmt}|{return})
 
 block = \{( {statement})* \}
 
