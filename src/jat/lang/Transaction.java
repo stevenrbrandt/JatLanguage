@@ -39,6 +39,8 @@ public class Transaction {
     for(Runnable r : tasks) {
       r.run();
     }
+    tasks.clear();
+    states.clear();
   }
 
   List<Runnable> tasks = new ArrayList<Runnable>();

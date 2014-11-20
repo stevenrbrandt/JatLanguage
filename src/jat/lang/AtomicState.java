@@ -19,5 +19,6 @@ public class AtomicState<T> implements Comparable<AtomicState<T>> {
   }
   public void set() {
     atom.data = data;
+    atom.state.set(null);
   }
 }
