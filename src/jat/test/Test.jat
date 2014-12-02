@@ -60,6 +60,7 @@ public class Test extends jat.lang.UnitTest {
             ss = test.ai.get();
             AtomicFuture<String> s = sync{ return "fish"; };
             sync{ System.out.println("sstran="+ss.get()); };
+            sync{ System.out.println("stran="+s.get()); };
         }
         System.out.println("ss="+ss.get());
         assertTrue(ss.get() == 5,"ss.get()==5");

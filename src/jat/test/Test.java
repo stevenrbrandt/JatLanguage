@@ -82,6 +82,11 @@ public class Test extends jat.lang.UnitTest  {
             System .out .println ("sstran=" + ss .get ());
           }
         });
+        __tr__.addTask(new Runnable() {
+          public void run() {
+            System .out .println ("stran=" + s .get ());
+          }
+        });
         __tr__.finish();
         break;
       } catch(jat.lang.TransactionRestart __res__) {

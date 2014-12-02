@@ -9,8 +9,11 @@ package jat.lang;
  */
 public class AtomicFuture<T> {
     private T data;
+    private boolean isset = false;
     public void set(final T v,final Transaction t) {
+        if(isset) throw new FutureAlreadySetException();
         data = v;
+        isset = true;
     }
     public T get(Transaction t) {
         return data;
