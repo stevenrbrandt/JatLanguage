@@ -254,6 +254,7 @@ public class Jat {
             // enforce final and interface Value
             // keep list of fields in meta data
             // methods too
+            //g.dumpMatches();
             int n = 0;
             boolean finalFlag = staticField||isAtomic;
             if(eq(g.group(n),"final")) {
@@ -297,6 +298,8 @@ public class Jat {
                 pw.print('=');
                 if(atomField) {
                     pw.print("new jat.lang.Atom<");
+                    if(!t.checkValue(this) || t.isa(Type.AtomicType,this))
+                      raiseFail("'"+t.toString()+"' not allowed in Atomic",g.group(n));
                     pw.print(t.objectify());
                     pw.print(">(");
                     emit(g.group(n+2));
@@ -306,6 +309,8 @@ public class Jat {
                 }
             } else if(atomField) {
                 pw.print("= new jat.lang.Atom</**/");
+                if(!t.checkValue(this) || t.isa(Type.AtomicType,this))
+                  raiseFail("'"+t.toString()+"' not allowed in Atomic",g.group(n));
                 pw.print(t.objectify());
                 pw.print(">()");
             }

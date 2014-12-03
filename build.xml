@@ -1,7 +1,7 @@
 <project name="Jat Compiler" id="Jat" default="test">
 
     <property name="build.dir" value="/tmp/jat" />
-    <property name="piraha.path" value="/home/sbrandt/workspace/piraha-peg/bin" />
+    <property name="piraha.path" value="jars/piraha.jar" />
 
     <path id="piraha">
         <pathelement path="${piraha.path}"/>
@@ -61,17 +61,17 @@
             classpath="${build.dir}"/>
         <jat1>
             <classpath refid="runtime"/>
-            <fileset dir="/home/sbrandt/java/jat/src"
+            <fileset dir="src"
                         includes="jat/test/SSN.jat"/>
         </jat1>
         <jat2>
             <classpath refid="runtime"/>
-            <fileset dir="/home/sbrandt/java/jat/src"
+            <fileset dir="src"
                         includes="jat/test/Person.jat"/>
         </jat2>
         <jat>
             <classpath refid="runtime"/>
-            <fileset dir="/home/sbrandt/java/jat/src"
+            <fileset dir="src"
                         includes="jat/test/*.jat"/>
         </jat>
         <javac debug="on"
@@ -83,7 +83,7 @@
         </javac>
         <unit>
             <classpath refid="runtime"/>
-            <fileset dir="/home/sbrandt/java/jat/src"
+            <fileset dir="src"
                         includes="jat/test/*.jat"/>
         </unit>
     </target>
@@ -93,7 +93,7 @@
             classpath="${build.dir}"/>
         <jat>
             <classpath refid="runtime"/>
-            <fileset dir="/home/sbrandt/java/jat/src"
+            <fileset dir="jat/src"
                         includes="jat/cfail/*.jat"/>
         </jat>
     </target>
